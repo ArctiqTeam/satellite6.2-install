@@ -1,0 +1,42 @@
+---
+  - name: import classes
+    command: hammer proxy import-classes --id 1
+
+  - name: update environment
+    command: hammer environment update --id 2 --location-ids 2 --organization-ids 1
+
+  - name: push manifest
+    copy:
+      src: manifest.zip
+      dest: /var/tmp/manifest.zip
+      mode: 0600
+
+  - name: upload subscription manifest
+    command: hammer subscription upload --file /var/tmp/manifest.zip --organization-id 1
+#
+# hammer repository-set enable  --organization-id 1 \
+# --product "Red Hat Enterprise Linux Server" \
+# --name "Red Hat Enterprise Linux 6 Server (Kickstart)" \
+# --releasever "6.7" --basearch "x86_64"
+#
+# hammer repository-set enable  --organization-id 1 \
+# --product "Red Hat Enterprise Linux Server" \
+# --name "Red Hat Enterprise Linux 6 Server (RPMs)" \
+# --releasever "6Server" --basearch "x86_64"
+#
+# hammer repository-set enable  --organization-id 1  \
+# --product "Red Hat Enterprise Linux Server"  \
+# --name "Red Hat Satellite Tools 6.2 (for RHEL 6 Server) (RPMs)" \
+# --basearch "x86_64"
+#
+  - name: enable sync for RHEL7 repos
+    command: "{{ item }}"
+    with_items:
+      - 'hammer repository-set enable  --organization-id 1 --product "Red Hat Enterprise Linux Server" --name "Red Hat Enterprise Linux 7 Server (Kickstart)" --releasever "7.2" --basearch "x86_64"'
+      - 'hammer repository-set enable  --organization-id 1 --product "Red Hat Enterprise Linux Server" --name "Red Hat Enterprise Linux 7 Server (RPMs)" --releasever "7Server" --basearch "x86_64"'
+      - 'hammer repository-set enable  --organization-id 1 --product "Red Hat Enterprise Linux Server" --name "Red Hat Satellite Tools 6.2 (for RHEL 7 Server) (RPMs)" --basearch "x86_64"'
+
+  # - name: enable sync for RHEL6 repos
+
+  - name: sync all enabled repos
+    shell: for i in $(hammer --csv repository list --organization-id 1  | awk -F, {'print $1'} | grep -vi '^ID'); do hammer repository synchronize --id ${i} --organization-id 1 --async; done

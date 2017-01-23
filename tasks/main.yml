@@ -1,0 +1,5 @@
+---
+# tasks file for /Users/tim/Dropbox/GitHub/sat-training-labs/provisioner/roles/satellite
+- name: Install Satellite
+  include: sat_install.yml
+  

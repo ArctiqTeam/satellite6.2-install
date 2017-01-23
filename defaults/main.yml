@@ -1,0 +1,4 @@
+---
+#All variables for the playbook are here.  Please change accordingly
+satellite_org: "Arctiq"
+satellite_loc: "Toronto"
