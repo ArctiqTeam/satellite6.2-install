@@ -1,4 +1,5 @@
 ---
+  ## Needs to be previously unregistered
   - name: register to RHN
     command: /usr/bin/subscription-manager register --username={{ rhn_username }} --password={{ rhn_password }}
     ignore_errors: yes
