@@ -23,7 +23,7 @@
     when: not subscription_status.stdout
 
   - name: Check status of registration
-    shell: /usr/bin/subscription-manager list --consumed --matches="*Red Hat Satellite Business Partner Standard Support NFR*" | awk '/Pool ID/ {print $3}' | head -1
+    shell: /usr/bin/subscription-manager list --consumed --matches="*Red Hat Satellite 6*" | awk '/Pool ID/ {print $3}' | head -1
     register: subscription_status
 
   - block:
