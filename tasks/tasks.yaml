@@ -1,0 +1,55 @@
+---
+- hosts: all  
+  vars:
+    organization: "Test"
+  tasks:
+  - name: Creating Lifecycle Environment "Development"
+    command: > 
+      /usr/bin/hammer lifecycle-environment create 
+      --organization "{{ organization }}" 
+      --name "Development" 
+      --description "Development environment" 
+      --prior "Library"
+  
+  - name: Creating Lifecycle Environment "Production"
+    command: >
+      /usr/bin/hammer lifecycle-environment create 
+      --organization "{{ organization }}" 
+      --name "Production" 
+      --description "Production environment" 
+      --prior "Development"
+  
+  - name: Enabling Repositories
+    command: "{{ item }}"
+    with_items: 
+      - /usr/bin/hammer repository-set enable 
+        --organization "{{ organization }}" 
+        --product "Red Hat Enterprise Linux Server" 
+        --basearch="x86_64" 
+        --releasever="7Server" 
+        --name "Red Hat Enterprise Linux 7 Server (RPMs)"
+      - /usr/bin/hammer repository-set enable
+        --organization "{{ organization }}"
+        --product "Red Hat Enterprise Linux Server"
+        --basearch="x86_64"
+        --name "Red Hat Satellite Tools 6.2 (for RHEL 7 Server) (RPMs)"
+
+  - name: Creating "Core" Content View for RHEL 7
+    command: >
+      /usr/bin/hammer content-view create
+      --name "cv-os-rhel-7Server"
+      --description "RHEL Server 7 Core Build Content View"
+      --organization "{{ organization }}"
+      
+  #- name: Sync Red Hat Satellite Tools 6.2 (for RHEL 7 Server) (RPMs)
+  #  command: >
+  #    /usr/bin/hammer product synchronize
+  #     --organization "{{ organization }}"
+  #     --name "Red Hat Satellite Tools 6.2 for RHEL 7 Server RPMs x86_64"
+  #     --async
+  #
+  #- name: Sync Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server
+  #  command: >
+  #    /usr/bin/hammer product synchronize
+  #    --organization "{{ organization }}"
+  #    --name "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"

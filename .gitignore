@@ -1,3 +1,4 @@
 extra_vars.yml
 *.log
 *.zip
+*.retry

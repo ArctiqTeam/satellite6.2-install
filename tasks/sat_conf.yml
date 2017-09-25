@@ -14,7 +14,7 @@
   - name: upload subscription manifest
     command: hammer subscription upload --file /var/tmp/manifest.zip --organization-id 1
 #
-# hammer repository-set enable  --organization-id 1 \
+# hammer repository-set enable  --organization-id 2 \
 # --product "Red Hat Enterprise Linux Server" \
 # --name "Red Hat Enterprise Linux 6 Server (Kickstart)" \
 # --releasever "6.7" --basearch "x86_64"
