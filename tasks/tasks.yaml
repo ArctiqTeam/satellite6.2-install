@@ -2,7 +2,14 @@
 - hosts: all  
   vars:
     organization: "Test"
+    manifest: "/root/manifest.zip"
   tasks:
+  - name: Upload Subscription Manifest
+    command: >
+      /usr/bin/hammer subscription upload
+      --organization "{{ organization }}"
+      --file {{ manifest }}
+
   - name: Creating Lifecycle Environment "Development"
     command: > 
       /usr/bin/hammer lifecycle-environment create 
@@ -40,7 +47,7 @@
       --name "cv-os-rhel-7Server"
       --description "RHEL Server 7 Core Build Content View"
       --organization "{{ organization }}"
-      
+     
   #- name: Sync Red Hat Satellite Tools 6.2 (for RHEL 7 Server) (RPMs)
   #  command: >
   #    /usr/bin/hammer product synchronize
